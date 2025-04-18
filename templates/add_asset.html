@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มทรัพย์สิน</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+    <style>
+        .dashboard-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .input-field {
+            background: #111827 !important;
+            border: 1px solid #374151 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-field:focus {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen text-gray-100">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <div class="mb-8 flex items-center justify-between">
+            <h1 class="text-2xl font-bold flex items-center">
+                <i class="fas fa-cube mr-3 text-red-500"></i>
+                เพิ่มทรัพย์สินใหม่
+            </h1>
+            <a href="{{ url_for('assets_list') }}" class="hover:text-red-400 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>
+                กลับไปที่รายการ
+            </a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="dashboard-card p-6">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert-{{ category }} p-3 mb-4 rounded-lg bg-red-900/50 border border-red-800">
+                            <i class="fas fa-exclamation-circle mr-2"></i>{{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="space-y-6">
+                <!-- Grid Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Asset ID -->
+                    <div>
+                        <label class="block mb-2 font-medium text-sm">
+                            <i class="fas fa-hashtag mr-2 text-gray-400"></i>
+                            ID ทรัพย์สิน
+                        </label>
+                        <input type="text" id="asset_id" name="asset_id" 
+                               class="input-field w-full p-3 rounded-lg" required>
+                    </div>
+
+                    <!-- Asset Type -->
+                    <div>
+                        <label class="block mb-2 font-medium text-sm">
+                            <i class="fas fa-tag mr-2 text-gray-400"></i>
+                            ประเภททรัพย์สิน
+                        </label>
+                        <select id="asset_type" name="asset_type" 
+                                class="input-field w-full p-3 rounded-lg">
+                            <option value="Notebook">Notebook</option>
+                            <option value="PC">PC</option>
+                            <option value="Keyboard">Keyboard</option>
+                            <option value="Mouse">Mouse</option>
+                            <option value="Monitor">Monitor</option>
+                            <option value="Mount">Mount</option>
+                            <option value="อื่นๆ">อื่นๆ</option>
+                        </select>
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <label class="block mb-2 font-medium text-sm">
+                            <i class="fas fa-coins mr-2 text-gray-400"></i>
+                            ราคาทรัพย์สิน
+                        </label>
+                        <input type="number" step="0.01" id="price" name="price" 
+                               class="input-field w-full p-3 rounded-lg">
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label class="block mb-2 font-medium text-sm">
+                            <i class="fas fa-heartbeat mr-2 text-gray-400"></i>
+                            สถานะ
+                        </label>
+                        <select id="status" name="status" 
+                                class="input-field w-full p-3 rounded-lg">
+                            <option value="ปกติ">ปกติ</option>
+                            <option value="เสีย">เสีย</option>
+                            <option value="ซ่อม">ซ่อม</option>
+                            <option value="เป็นอะไหล่">เป็นอะไหล่</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div>
+                    <label class="block mb-2 font-medium text-sm">
+                        <i class="fas fa-align-left mr-2 text-gray-400"></i>
+                        รายละเอียดทรัพย์สิน
+                    </label>
+                    <textarea id="details" name="details" 
+                              class="input-field w-full p-3 rounded-lg resize-none" 
+                              rows="4"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        class="w-full bg-red-600 hover:bg-red-700 py-3 px-6 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    เพิ่มทรัพย์สิน
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

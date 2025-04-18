@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขทรัพย์สิน</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f1524;
+            color: #f3f4f6;
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        .navbar {
+            background-color: #1a2236;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #b91c1c;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #1a2236;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control {
+            background-color: #2d3748;
+            color: white;
+            border: 1px solid #4a5568;
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+            outline: none;
+        }
+        
+        .form-control::placeholder {
+            color: #9ca3af;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            color: #e5e7eb;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background-color: #b91c1c;
+        }
+        
+        .btn-secondary {
+            background-color: #4b5563;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6b7280;
+        }
+        
+        .link-primary {
+            color: #dc2626;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .link-primary:hover {
+            color: #b91c1c;
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: #9ca3af;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: #e5e7eb;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            margin-right: 0.75rem;
+            color: #dc2626;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #dc2626;
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+        
+        .status-select option[value="ปกติ"] {
+            background-color: #065f46;
+        }
+        
+        .status-select option[value="เสีย"] {
+            background-color: #991b1b;
+        }
+        
+        .status-select option[value="ซ่อม"] {
+            background-color: #92400e;
+        }
+        
+        .status-select option[value="เป็นอะไหล่"] {
+            background-color: #1e3a8a;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-brand">App Dashboard</div>
+        <div class="flex items-center">
+            <span class="mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                admin
+            </span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm7 4a1 1 0 10-2 0v4a1 1 0 102 0V7z" clip-rule="evenodd" />
+                    <path d="M8 11a1 1 0 100-2H4a1 1 0 100 2h4z" />
+                </svg>
+                ออกจากระบบ
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card-header">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 card-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+            <h1 class="text-2xl font-bold">แก้ไขทรัพย์สิน</h1>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 mb-4 rounded-md {% if category == 'success' %}bg-green-700 text-green-100{% else %}bg-red-700 text-red-100{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="asset_id" class="form-label required-field">ID ทรัพย์สิน</label>
+                <input type="text" id="asset_id" name="asset_id" class="form-control" value="{{ asset.asset_id }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="asset_type" class="form-label required-field">ประเภททรัพย์สิน</label>
+                <select id="asset_type" name="asset_type" class="form-control form-select">
+                    <option value="Notebook" {% if asset.asset_type == 'Notebook' %}selected{% endif %}>Notebook</option>
+                    <option value="PC" {% if asset.asset_type == 'PC' %}selected{% endif %}>PC</option>
+                    <option value="Keyboard" {% if asset.asset_type == 'Keyboard' %}selected{% endif %}>Keyboard</option>
+                    <option value="Mouse" {% if asset.asset_type == 'Mouse' %}selected{% endif %}>Mouse</option>
+                    <option value="Monitor" {% if asset.asset_type == 'Monitor' %}selected{% endif %}>Monitor</option>
+                    <option value="Mount" {% if asset.asset_type == 'Mount' %}selected{% endif %}>Mount</option>
+                    <option value="อื่นๆ" {% if asset.asset_type == 'อื่นๆ' %}selected{% endif %}>อื่นๆ</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="username" class="form-label required-field">ชื่อผู้ใช้งาน</label>
+                <input type="text" id="username" name="username" class="form-control" value="{{ asset.username }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="details" class="form-label">รายละเอียดทรัพย์สิน</label>
+                <textarea id="details" name="details" class="form-control" rows="3">{{ asset.details }}</textarea>
+                <p class="text-gray-400 text-sm mt-1">เช่น รุ่น, หมายเลขซีเรียล, ข้อมูลจำเพาะ ฯลฯ</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="price" class="form-label">ราคาทรัพย์สิน (บาท)</label>
+                <input type="number" step="0.01" id="price" name="price" class="form-control" value="{{ asset.price }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="status" class="form-label required-field">สถานะ</label>
+                <select id="status" name="status" class="form-control form-select status-select">
+                    <option value="ปกติ" {% if asset.status == 'ปกติ' %}selected{% endif %}>ปกติ</option>
+                    <option value="เสีย" {% if asset.status == 'เสีย' %}selected{% endif %}>เสีย</option>
+                    <option value="ซ่อม" {% if asset.status == 'ซ่อม' %}selected{% endif %}>ซ่อม</option>
+                    <option value="เป็นอะไหล่" {% if asset.status == 'เป็นอะไหล่' %}selected{% endif %}>เป็นอะไหล่</option>
+                </select>
+            </div>
+
+            {% if is_admin %}
+            <div class="form-group">
+                <label for="department" class="form-label required-field">แผนก</label>
+                <select id="department" name="department" class="form-control form-select">
+                    <option value="HR" {% if asset.department == 'HR' %}selected{% endif %}>HR</option>
+                    <option value="Marketing" {% if asset.department == 'Marketing' %}selected{% endif %}>Marketing</option>
+                    <option value="Sales" {% if asset.department == 'Sales' %}selected{% endif %}>Sales</option>
+                    <option value="IT" {% if asset.department == 'IT' %}selected{% endif %}>IT</option>
+                    <option value="บัญชี" {% if asset.department == 'บัญชี' %}selected{% endif %}>บัญชี</option>
+                </select>
+            </div>
+            {% endif %}
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                <button class="btn-primary w-full sm:w-auto" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    บันทึกการเปลี่ยนแปลง
+                </button>
+                <a href="{{ url_for('assets_list') }}" class="btn-secondary w-full sm:w-auto text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    ยกเลิก
+                </a>
+            </div>
+        </form>
+
+        <a href="{{ url_for('assets_list') }}" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            กลับไปที่รายการทรัพย์สิน
+        </a>
+    </div>
+</body>
+</html>
